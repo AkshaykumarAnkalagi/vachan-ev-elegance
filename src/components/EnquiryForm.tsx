@@ -12,11 +12,31 @@ interface EnquiryFormProps {
   type: "customer" | "dealer";
 }
 
+// Define separate interfaces for each form type
+interface CustomerFormData {
+  name: string;
+  phone: string;
+  email: string;
+  model: string;
+  city: string;
+  message: string;
+}
+
+interface DealerFormData {
+  businessName: string;
+  contactPersonName: string;
+  phone: string;
+  email: string;
+  cityOfInterest: string;
+  fleetVolume: string;
+  message: string;
+}
+
 const EnquiryForm = ({ type }: EnquiryFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const customerFormData = {
+  const customerFormData: CustomerFormData = {
     name: "",
     phone: "",
     email: "",
@@ -25,7 +45,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
     message: "",
   };
 
-  const dealerFormData = {
+  const dealerFormData: DealerFormData = {
     businessName: "",
     contactPersonName: "",
     phone: "",
@@ -35,7 +55,8 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
     message: "",
   };
 
-  const [formData, setFormData] = useState(
+  // Use the proper type based on the form type
+  const [formData, setFormData] = useState<CustomerFormData | DealerFormData>(
     type === "customer" ? customerFormData : dealerFormData
   );
 
@@ -83,7 +104,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={(formData as CustomerFormData).name}
                   onChange={handleChange}
                   placeholder="John Doe"
                   required
@@ -97,7 +118,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="phone"
                   name="phone"
-                  value={(formData as any).phone}
+                  value={formData.phone}
                   onChange={handleChange}
                   placeholder="+91 98765 43210"
                   required
@@ -114,7 +135,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                   id="email"
                   name="email"
                   type="email"
-                  value={(formData as any).email}
+                  value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
                   required
@@ -128,7 +149,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="city"
                   name="city"
-                  value={(formData as any).city}
+                  value={(formData as CustomerFormData).city}
                   onChange={handleChange}
                   placeholder="Bengaluru"
                   required
@@ -141,7 +162,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 Select Model
               </label>
               <RadioGroup 
-                defaultValue={(formData as any).model} 
+                defaultValue={(formData as CustomerFormData).model} 
                 onValueChange={(value) => handleSelectChange("model", value)}
                 className="flex flex-col space-y-2"
               >
@@ -163,7 +184,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
               <Textarea
                 id="message"
                 name="message"
-                value={(formData as any).message}
+                value={formData.message}
                 onChange={handleChange}
                 placeholder="Tell us more about your requirements..."
                 rows={4}
@@ -181,7 +202,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="businessName"
                   name="businessName"
-                  value={(formData as any).businessName}
+                  value={(formData as DealerFormData).businessName}
                   onChange={handleChange}
                   placeholder="ABC Motors"
                   required
@@ -195,7 +216,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="contactPersonName"
                   name="contactPersonName"
-                  value={(formData as any).contactPersonName}
+                  value={(formData as DealerFormData).contactPersonName}
                   onChange={handleChange}
                   placeholder="John Doe"
                   required
@@ -211,7 +232,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="phone"
                   name="phone"
-                  value={(formData as any).phone}
+                  value={formData.phone}
                   onChange={handleChange}
                   placeholder="+91 98765 43210"
                   required
@@ -226,7 +247,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                   id="email"
                   name="email"
                   type="email"
-                  value={(formData as any).email}
+                  value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
                   required
@@ -242,7 +263,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 <Input
                   id="cityOfInterest"
                   name="cityOfInterest"
-                  value={(formData as any).cityOfInterest}
+                  value={(formData as DealerFormData).cityOfInterest}
                   onChange={handleChange}
                   placeholder="Bengaluru"
                   required
@@ -255,7 +276,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
                 </label>
                 <Select 
                   onValueChange={(value) => handleSelectChange("fleetVolume", value)}
-                  defaultValue={(formData as any).fleetVolume}
+                  defaultValue={(formData as DealerFormData).fleetVolume}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select volume" />
@@ -277,7 +298,7 @@ const EnquiryForm = ({ type }: EnquiryFormProps) => {
               <Textarea
                 id="message"
                 name="message"
-                value={(formData as any).message}
+                value={formData.message}
                 onChange={handleChange}
                 placeholder="Tell us more about your business and requirements..."
                 rows={4}
